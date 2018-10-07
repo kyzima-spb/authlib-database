@@ -8,7 +8,7 @@ setup(
     license='GNU AGPLv3+',
     author='Kirill Vercetti',
     author_email='office@kyzima-spb.com',
-    description='',
+    description='Support for third-party databases in the Autlib library.',
     install_requires=[
         'Authlib'
     ]

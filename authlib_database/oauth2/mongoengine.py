@@ -58,7 +58,7 @@ class OAuth2ClientMixin(ClientMixin):
 class OAuth2AuthorizationCodeMixin(AuthorizationCodeMixin):
     code = StringField(required=True, max_length=120, unique=True)
     client_id = StringField(max_length=48)
-    redirect_uri = URLField(default='')
+    redirect_uri = URLField(null=True)
     response_type = StringField(default='')
     scope = StringField(default='')
     auth_time = IntField(required=True, default=time)
