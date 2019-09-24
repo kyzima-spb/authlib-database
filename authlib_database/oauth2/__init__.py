@@ -1,43 +1,17 @@
-# coding: utf-8
-
 import json
 from time import time
 
-from authlib.specs.rfc6749 import (
+from authlib.oauth2.rfc6749 import (
     ClientMixin as _ClientMixin,
     TokenMixin as _TokenMixin,
     AuthorizationCodeMixin as _AuthorizationCodeMixin,
 )
+from authlib.oauth2.rfc6749.util import scope_to_list, list_to_scope
 
 
 class ClientMixin(_ClientMixin):
     def __repr__(self):
         return '<Client: {}>'.format(self.client_id)
-
-    def check_client_secret(self, client_secret):
-        return self.client_secret == client_secret
-
-    def check_grant_type(self, grant_type):
-        return grant_type in self.grant_types
-
-    def check_redirect_uri(self, redirect_uri):
-        return redirect_uri in self.redirect_uris
-
-    def check_requested_scopes(self, scopes):
-        return set(self.scope.split()).issuperset(set(scopes))
-
-    def check_response_type(self, response_type):
-        return response_type in self.response_types
-
-    def check_token_endpoint_auth_method(self, method):
-        return self.token_endpoint_auth_method == method
-
-    def get_default_redirect_uri(self):
-        if self.redirect_uris:
-            return self.redirect_uris[0]
-
-    def has_client_secret(self):
-        return bool(self.client_secret)
 
     @property
     def redirect_uris(self):
@@ -134,6 +108,38 @@ class ClientMixin(_ClientMixin):
             client_secret_expires_at=self.expires_at,
         )
 
+    def get_client_id(self):
+        return self.client_id
+
+    def get_default_redirect_uri(self):
+        if self.redirect_uris:
+            return self.redirect_uris[0]
+
+    def get_allowed_scope(self, scope):
+        if not scope:
+            return ''
+        allowed = set(self.scope.split())
+        scopes = scope_to_list(scope)
+        return list_to_scope([s for s in scopes if s in allowed])
+
+    def check_redirect_uri(self, redirect_uri):
+        return redirect_uri in self.redirect_uris
+
+    def has_client_secret(self):
+        return bool(self.client_secret)
+
+    def check_client_secret(self, client_secret):
+        return self.client_secret == client_secret
+
+    def check_token_endpoint_auth_method(self, method):
+        return self.token_endpoint_auth_method == method
+
+    def check_response_type(self, response_type):
+        return response_type in self.response_types
+
+    def check_grant_type(self, grant_type):
+        return grant_type in self.grant_types
+
 
 class AuthorizationCodeMixin(_AuthorizationCodeMixin):
     def is_expired(self):
@@ -150,6 +156,9 @@ class AuthorizationCodeMixin(_AuthorizationCodeMixin):
 
 
 class TokenMixin(_TokenMixin):
+    def get_client_id(self):
+        return self.client_id
+
     def get_scope(self):
         return self.scope
 
