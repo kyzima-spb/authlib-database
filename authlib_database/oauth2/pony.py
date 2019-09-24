@@ -1,9 +1,7 @@
-# coding: utf-8
-
 import time
 
-from authlib.specs.rfc6750 import BearerTokenValidator
-from authlib.specs.rfc7009 import RevocationEndpoint
+from authlib.oauth2.rfc6750 import BearerTokenValidator
+from authlib.oauth2.rfc7009 import RevocationEndpoint
 from pony.orm import *
 
 from . import ClientMixin, AuthorizationCodeMixin, TokenMixin

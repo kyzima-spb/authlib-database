@@ -1,9 +1,7 @@
-# coding: utf-8
-
 from time import time
 
-from authlib.specs.rfc6750 import BearerTokenValidator
-from authlib.specs.rfc7009 import RevocationEndpoint
+from authlib.oauth2.rfc6750 import BearerTokenValidator
+from authlib.oauth2.rfc7009 import RevocationEndpoint
 from mongoengine.fields import *
 
 from . import ClientMixin, AuthorizationCodeMixin, TokenMixin
@@ -24,7 +22,7 @@ __all__ = [
 class OAuth2ClientMixin(ClientMixin):
     client_id = StringField(required=True, max_length=48)
     client_secret = StringField(max_length=120)
-    issued_at = IntField(required=True, default=time)
+    issued_at = IntField(required=True, default=lambda: int(time()))
     expires_at = IntField(required=True, default=0)
 
     redirect_uris = ListField(URLField(), required=True, default=[])
